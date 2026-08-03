@@ -18,6 +18,7 @@ int main() {
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
+    SetWindowMinSize(1024, 768);
     SetTargetFPS(FPS_TARGET);
 
     setupGuiStyle();

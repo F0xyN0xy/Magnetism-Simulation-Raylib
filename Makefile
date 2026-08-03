@@ -2,16 +2,19 @@
 # Supports Linux, macOS, and Windows (via MinGW)
 
 CXX      = g++
+RC       = windres
 CXXFLAGS = -std=c++17 -O2 -Wall -Wextra
-TARGET   = magnetism
+TARGET   = Magnetism-Simulation
 
 SRCS = main.cpp magnet.cpp physics.cpp field.cpp particles.cpp compass.cpp renderer.cpp ui.cpp
 OBJS = $(SRCS:.cpp=.o)
+RES    = resource.o
 
 # Raylib paths (adjust these to your actual install location)
-RAYLIB_DIR = C:/raylib
+RAYLIB_DIR     = C:/raylib
 RAYLIB_INCLUDE = $(RAYLIB_DIR)/raylib/src
-RAYLIB_LIB     = $(RAYLIB_DIR)/lib
+RAYGUI_INCLUDE = $(RAYLIB_DIR)/raygui/src
+RAYLIB_LIB     = $(RAYLIB_DIR)/raylib/src
 
 # Platform detection
 ifeq ($(OS),Windows_NT)
@@ -29,11 +32,9 @@ endif
 # Platform-specific flags
 ifeq ($(PLATFORM),WINDOWS)
     TARGET := $(TARGET).exe
-    CXXFLAGS += -I$(RAYLIB_INCLUDE)
-    # Static linking - no DLLs needed!
-    LDFLAGS = -L$(RAYLIB_LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -static-libgcc -static-libstdc++
+    CXXFLAGS += -I$(RAYLIB_INCLUDE) -I$(RAYGUI_INCLUDE)
+    LDFLAGS = -L$(RAYLIB_LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -static-libgcc -static-libstdc++ -mwindows
     RM = del /Q
-    RMDIR = rmdir /S /Q
 else ifeq ($(PLATFORM),LINUX)
     LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
     RM = rm -f
@@ -46,17 +47,20 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(RES)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+resource.o: resource.rc
+	$(RC) -i $< -o $@
+
 clean:
 ifeq ($(PLATFORM),WINDOWS)
-	-$(RM) $(subst /,\,$(OBJS)) $(subst /,\,$(TARGET))
+	-$(RM) $(subst /,\,$(OBJS)) $(subst /,\,$(RES)) $(subst /,\,$(TARGET))
 else
-	$(RM) $(OBJS) $(TARGET)
+	$(RM) $(OBJS) $(RES) $(TARGET)
 endif
 
 run: $(TARGET)

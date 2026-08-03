@@ -1,0 +1,11 @@
+field.o
+magnet.o
+main.o
+physics.o
+compass.o
+particles.o
+renderer.o
+ui.o
+resource.o
+app.ico
+Magnetism-Simulation.exe

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <raylib.h>
+#include "constants.hpp"
 #include <vector>
 #include "magnet.hpp"
 

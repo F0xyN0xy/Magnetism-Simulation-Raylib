@@ -100,6 +100,9 @@ void drawSidePanel(UIRects& r, AppState& state, Magnet* selected) {
     DrawRectangleRec(r.panel, CLR_PANEL_BG);
     DrawRectangleLinesEx(r.panel, 1, CLR_UI_BORDER);
 
+    // Clip everything to the panel bounds
+    BeginScissorMode((int)r.panel.x, (int)r.panel.y, (int)r.panel.width, (int)r.panel.height);
+
     float x = r.panel.x + 12;
     float y = r.panel.y + 12;
     float w = r.panel.width - 24;
@@ -159,13 +162,15 @@ void drawSidePanel(UIRects& r, AppState& state, Magnet* selected) {
         DrawText(TextFormat("Angle: %.1f deg", angleDeg), (int)x, (int)y, 13, CLR_UI_TEXT);
         y += 18;
         DrawText(TextFormat("Velocity: %.1f", sqrtf(selected->vel.x*selected->vel.x + selected->vel.y*selected->vel.y)),
-                 (int)x, (int)y, 13, CLR_UI_TEXT);
+            (int)x, (int)y, 13, CLR_UI_TEXT);
         y += 26;
 
         if (GuiButton({x, y, w, 28}, "Apply Global Strength")) {
             selected->strength = state.magnetStrength;
         }
     }
+
+    EndScissorMode();
 }
 
 void drawStatusBar(UIRects& r, int fps, int magnetCount, Magnet* selected) {
