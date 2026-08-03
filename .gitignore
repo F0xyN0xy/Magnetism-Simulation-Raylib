@@ -8,4 +8,6 @@ renderer.o
 ui.o
 resource.o
 app.ico
+version.o
 Magnetism-Simulation.exe
+scan-virustotal.ps1
