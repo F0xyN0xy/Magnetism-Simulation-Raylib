@@ -33,7 +33,15 @@ endif
 ifeq ($(PLATFORM),WINDOWS)
     TARGET := $(TARGET).exe
     CXXFLAGS += -I$(RAYLIB_INCLUDE) -I$(RAYGUI_INCLUDE)
-    LDFLAGS = -L$(RAYLIB_LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -static-libgcc -static-libstdc++ -mwindows
+    LDFLAGS = -L$(RAYLIB_LIB) \
+    -static \
+    -static-libgcc \
+    -static-libstdc++ \
+    -lraylib \
+    -lopengl32 \
+    -lgdi32 \
+    -lwinmm \
+    -mwindows
     RM = del /Q
 else ifeq ($(PLATFORM),LINUX)
     LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
